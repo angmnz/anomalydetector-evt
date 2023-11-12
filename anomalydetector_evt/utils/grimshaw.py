@@ -17,7 +17,7 @@ def v(x, peaks):
 
 def f(x, peaks):
 
-    """Funcion a minimizar"""
+    """Funcion para encontrar las soluciones"""
     
     s = 1 + x * peaks
     u = np.mean(1 / s)
@@ -27,7 +27,7 @@ def f(x, peaks):
 
 def loglikehood(peaks, gamma, sigma):
 
-    """Funcion de logverosimilitud de DPG a minimizar"""
+    """Funcion de logverosimilitud de DPG a maximizar"""
 
     N = len(peaks)
     s = 1 + (gamma/sigma) * peaks
@@ -53,22 +53,27 @@ def grimshaw(peaks:np.array):
     epsilon = min(1e-9, 0.5/peaks_max)
 
     # Intervalo izquierdo
-    a = -1 / peaks_max + epsilon
-    b = -epsilon
-
-    try:
-        vec_roots.append(brentq(f, a, b, args=peaks))
-    except:
-        None
+    ai = -1 / peaks_max + epsilon
+    bi = -epsilon
 
     # Intervalo derecho
-    a = epsilon
-    b = 2 * (peaks_mean - peaks_min) / (peaks_min**2)
+    ad = epsilon
+    bd = 2 * (peaks_mean - peaks_min) / (peaks_min**2)
+
+    gamma, sigma = False, False
 
     try:
-        vec_roots.append(brentq(f, a, b, args=peaks))
-    except:
+        vec_roots.append(brentq(f, ai, bi, args=peaks))
+
+    except ValueError as e:
         None
+
+    # Buscar raíces en el intervalo derecho
+    try:
+        vec_roots.append(brentq(f, ad, bd, args=peaks))
+
+    except ValueError as e:
+        None     
 
     llh = -10e10
     for root in vec_roots:
@@ -77,6 +82,7 @@ def grimshaw(peaks:np.array):
         sigma_ = gamma_/root
 
         llh2 = loglikehood(peaks, gamma_, sigma_)
+
         if llh2 > llh:
             gamma = gamma_
             sigma = sigma_
