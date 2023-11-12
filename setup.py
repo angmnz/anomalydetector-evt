@@ -9,7 +9,7 @@ setup(
     author_email='angiedmc98@gmail.com',
     license='unlicense',
     packages=['anomalydetector_evt'],
-    intall_requires=['numpy', 'scipy', 'pandas']
+    intall_requires=['numpy', 'scipy', 'pandas'],
     zip_safe=False
 )
 
