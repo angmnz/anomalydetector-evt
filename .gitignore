@@ -1,1 +1,3 @@
 venv
+.DS_Store
+anomalydetector_evt/utils/__pycache__/*.pyc
