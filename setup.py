@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
     name='anomalydetector-evt',
@@ -8,7 +8,7 @@ setup(
     author='Angie Mendez',
     author_email='angiedmc98@gmail.com',
     license='unlicense',
-    packages=['anomalydetector_evt'],
+    packages=find_packages(),
     intall_requires=['numpy', 'scipy', 'pandas'],
     zip_safe=False
 )
